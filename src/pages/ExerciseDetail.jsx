@@ -13,6 +13,8 @@ import SimilarExercises from "../components/SimilarExercises";
 function ExerciseDetail() {
   const [exerciseDetail, setExerciseDetail] = useState({});
   const [exerciseVideos, setExerciseVideos] = useState([]);
+  const [targetMuscleExercises, setTargetMuscleExercises] = useState([]);
+  const [equipmentExercises, setEquipmentExercises] = useState([]);
   const { id } = useParams();
   useEffect(() => {
     const fetchExercisesData = async () => {
@@ -32,6 +34,16 @@ function ExerciseDetail() {
         youtubeOptions
       );
       setExerciseVideos(exerciseVideosData.contents);
+      const trargetMuscleExercisesData = await fetchData(
+        `${exerciseDbUrl}/exercises/target/${exerciseDetailData.target}`,
+        exerciseOptions
+      );
+      setTargetMuscleExercises(trargetMuscleExercisesData);
+      const equipmentExercisesData = await fetchData(
+        `${exerciseDbUrl}/exercises/equipment/${exerciseDetailData.equipment}`,
+        exerciseOptions
+      );
+      setEquipmentExercises(equipmentExercisesData);
     };
     fetchExercisesData();
   }, [id]);
@@ -43,7 +55,10 @@ function ExerciseDetail() {
         exerciseVideos={exerciseVideos}
         name={exerciseDetail.name}
       />
-      <SimilarExercises />
+      <SimilarExercises
+        targetMuscleExercises={targetMuscleExercises}
+        equipmentExercises={equipmentExercises}
+      />
     </Box>
   );
 }
